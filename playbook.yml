@@ -32,3 +32,28 @@
         - postgresql-9.3
         - memcached
         - vim
+        - redis-server
+        - nano
+
+    - name: Install python requirements dependency pkgs
+      sudo: yes
+      apt: pkg={{ item }} state=present
+      with_items:
+        - python-dev
+        - pkg-config
+        - graphviz
+        - libgraphviz-dev
+        - libmemcached-dev
+
+    # Setup virtualenv and requirements
+    - name: Install python pkgs
+      sudo: yes
+      apt: pkg=python-pip state=present
+
+    - name: Update pip
+      sudo: yes
+      pip: name=pip state=latest
+
+    - name: Install virtualenv
+      sudo: yes
+      pip: name=virtualenvwrapper
