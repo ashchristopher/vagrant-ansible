@@ -39,6 +39,13 @@
         - libmemcached-dev
         - python-pip
         - build-essential
+        - libpng12-0
+        - libpng12-0-dev
+        - libfreetype6
+        - libfreetype6-dev
+        - gfortran
+        - libopenblas-dev
+        - liblapack-dev
 
     # Setup PostgreSQL
     - name: Update pg_hba.conf
