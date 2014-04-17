@@ -46,6 +46,7 @@
         - gfortran
         - libopenblas-dev
         - liblapack-dev
+        - git
 
     # Setup PostgreSQL
     - name: Update pg_hba.conf
