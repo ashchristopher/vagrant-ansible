@@ -77,7 +77,7 @@
     - { role: Stouts.ntp, sudo: yes }
     - { role: Stouts.locale, sudo: yes }
     - { role: Stouts.python}
-    # - { role: Stouts.rabbitmq, sudo: yes }
+    - { role: Stouts.rabbitmq, sudo: yes }
     - { role: ANXS.postgresql, sudo: yes }
 
 
