@@ -47,6 +47,7 @@
         - libopenblas-dev
         - liblapack-dev
         - git
+        - libzmq-dev
 
     # Setup PostgreSQL
     - name: Update pg_hba.conf
