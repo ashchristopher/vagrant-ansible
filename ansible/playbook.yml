@@ -38,6 +38,32 @@
       tags: administrator
     rabbitmq_vhosts: []
 
+    # ANXS.postgresql
+    postgresql_version: 9.3
+    postgresql_encoding: 'UTF-8'
+    postgresql_locale: 'en_US.UTF-8'
+    postgresql_admin_user: "postgres"
+    postgresql_default_auth_method: "trust"
+    postgresql_cluster_name: "main"
+    postgresql_cluster_reset: false
+    postgresql_databases:
+    - name: default
+      hstore: no         # flag to install the hstore extension on this database (yes/no)
+      uuid_ossp: no 
+    postgresql_users:
+    - name: vagrant
+      pass: 
+      encrypted: no
+    postgresql_user_privileges:
+    - name: vagrant
+      db: default
+      priv: "ALL"
+      role_attr_flags: "CREATEDB"
+    postgresql_pg_hba_default:
+    - { type: local, database: all, user: 'all', address: '', method: '{{ postgresql_default_auth_method }}', comment: '' }
+    - { type: local, database: all, user: all, address: '',             method: '{{ postgresql_default_auth_method }}', comment: '"local" is for Unix domain socket connections only' }
+    - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
+    - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
 
 
   pre_tasks:
@@ -50,5 +76,11 @@
     - { role: Stouts.timezone, sudo: yes }
     - { role: Stouts.ntp, sudo: yes }
     - { role: Stouts.locale, sudo: yes }
-    - { role: Stouts.python, sudo: yes }
-    - { role: Stouts.rabbitmq, sudo: yes }
+    - { role: Stouts.python}
+    # - { role: Stouts.rabbitmq, sudo: yes }
+    - { role: ANXS.postgresql, sudo: yes }
+
+
+  post_tasks:
+    - name: Add sourcing of virtualenvwrapper in bash profile
+      lineinfile: dest="~/.profile" line="source /usr/local/bin/virtualenvwrapper.sh"
