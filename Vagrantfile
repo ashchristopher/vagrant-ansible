@@ -8,17 +8,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-
-  config.vm.network :private_network, ip: "192.168.33.10"
-  config.vm.network :forwarded_port, guest: 80, host: 7000
-
+  config.vm.network :private_network, ip: "10.0.0.3"
   config.ssh.forward_agent = true
+  config.vm.synced_folder ".", "/vagrant", :nfs => true, :nfs_version => "3,nolock,udp"
 
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.provider :virtualbox do |vb|
+    vb.customize [
+      "modifyvm", :id,
+      "--memory", 2048,
+      "--cpus", 2,
+      "--rtcuseutc", "on",
+    ]
+  end
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
