@@ -48,7 +48,7 @@
     postgresql_cluster_reset: false
     postgresql_databases:
     - name: default
-      hstore: no         # flag to install the hstore extension on this database (yes/no)
+      hstore: no
       uuid_ossp: no 
     postgresql_users:
     - name: vagrant
@@ -69,6 +69,9 @@
     redis_enabled: yes
     redis_bind: 0.0.0.0
 
+    # azavea.elasticsearch
+
+
 
   pre_tasks:
     - name: Update apt-get
@@ -84,6 +87,7 @@
     - { role: Stouts.rabbitmq, sudo: yes }
     - { role: ANXS.postgresql, sudo: yes }
     - { role: Stouts.redis, sudo: yes }
+    - { role: azavea.elasticsearch, sudo: yes }
 
 
   post_tasks:
