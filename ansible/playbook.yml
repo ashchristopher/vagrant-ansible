@@ -65,6 +65,10 @@
     - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
     - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
 
+    # Stouts.redis
+    redis_enabled: yes
+    redis_bind: 0.0.0.0
+
 
   pre_tasks:
     - name: Update apt-get
@@ -79,6 +83,7 @@
     - { role: Stouts.python}
     - { role: Stouts.rabbitmq, sudo: yes }
     - { role: ANXS.postgresql, sudo: yes }
+    - { role: Stouts.redis, sudo: yes }
 
 
   post_tasks:
