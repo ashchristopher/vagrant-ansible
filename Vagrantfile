@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.hostname = "dev"
   config.vm.network :private_network, ip: "10.0.0.3"
   config.ssh.forward_agent = true
   config.vm.synced_folder ".", "/vagrant", :nfs => true, :nfs_version => "3,nolock,udp"
@@ -22,6 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "ansible/playbook.yml"
+    ansible.inventory_path = "ansible/ansible_hosts"
   end
 end

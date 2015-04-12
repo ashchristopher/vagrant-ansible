@@ -1,0 +1,7 @@
+---
+
+- include: configure.deb.yml
+  when: ansible_os_family == 'Debian'
+
+- include: configure.yum.yml
+  when: ansible_os_family == 'RedHat'
