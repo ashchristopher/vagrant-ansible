@@ -3,7 +3,7 @@
 
   vars:
     working_dir: "/vagrant"
-  
+
     # Stouts.timezone
     timezone_enabled: yes
     timezone_timezone: UTC
@@ -72,13 +72,12 @@
     # azavea.elasticsearch
 
 
-
   pre_tasks:
     - name: Update apt-get
       sudo: yes
       apt: update_cache=yes
 
-  
+
   roles:
     - { role: Stouts.timezone, sudo: yes }
     - { role: Stouts.ntp, sudo: yes }
@@ -88,7 +87,7 @@
     - { role: ANXS.postgresql, sudo: yes }
     - { role: Stouts.redis, sudo: yes }
     - { role: azavea.elasticsearch, sudo: yes }
-
+    - { role: gcporras.virtualenvwrapper, sudo: yes}
 
   post_tasks:
     - name: Add sourcing of virtualenvwrapper in bash profile
