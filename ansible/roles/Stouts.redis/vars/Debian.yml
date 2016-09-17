@@ -1,0 +1,4 @@
+---
+
+redis_requirements: ['gcc', 'make', 'libc6-dev', 'tcl8.5']
+redis_env_path: /etc/default/redis

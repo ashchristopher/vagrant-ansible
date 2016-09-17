@@ -8,7 +8,7 @@
     timezone_enabled: yes
     timezone_timezone: UTC
 
-    # Stours.ntp
+    # Stouts.ntp
     ntp_enabled: yes
 
     # Stouts.locale
@@ -19,10 +19,13 @@
     # Stouts.python
     python_enabled: yes
     python_ppa: ppa:fkrull/deadsnakes
-    python_versions: [2.7]
-    python_install: [ipython, ipdb, virtualenvwrapper]
-    python_virtualenvs:
-    - path: /home/vagrant/.virtualenvs
+    python_versions: [2.7, 3.4]
+    python_install: [
+      'urllib3[secure]', 
+      ipython, 
+      ipdb, 
+      virtualenvwrapper
+    ]
 
     # Stouts.rabbitmq
     rabbitmq_enabled: yes
@@ -36,58 +39,76 @@
       read_priv: .*
       write_priv: .*
       tags: administrator
-    rabbitmq_vhosts: []
+    rabbitmq_vhosts: [default]
+    rabbitmq_users_remove:
+      - guest
 
-    # ANXS.postgresql
-    postgresql_version: 9.3
-    postgresql_encoding: 'UTF-8'
-    postgresql_locale: 'en_US.UTF-8'
-    postgresql_admin_user: "postgres"
-    postgresql_default_auth_method: "trust"
-    postgresql_cluster_name: "main"
-    postgresql_cluster_reset: false
-    postgresql_databases:
-    - name: default
-      hstore: no
-      uuid_ossp: no 
-    postgresql_users:
-    - name: vagrant
-      pass: 
-      encrypted: no
-    postgresql_user_privileges:
-    - name: vagrant
-      db: default
-      priv: "ALL"
-      role_attr_flags: "CREATEDB"
-    postgresql_pg_hba_default:
-    - { type: local, database: all, user: 'all', address: '', method: '{{ postgresql_default_auth_method }}', comment: '' }
-    - { type: local, database: all, user: all, address: '',             method: '{{ postgresql_default_auth_method }}', comment: '"local" is for Unix domain socket connections only' }
-    - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
-    - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
-
+    # Stouts.elasticsearch
+    elasticsearch_plugins:
+    - name: lukas-vlcek/bigdesk
+    
     # Stouts.redis
     redis_enabled: yes
     redis_bind: 0.0.0.0
+    redis_databases: 8
 
-    # azavea.elasticsearch
+    # Stouts.apt
+    apt_enabled: yes
+    apt_default_packages:
+      - redis-tools
+      - git
+
+
+
+
+  #   # ANXS.postgresql
+  #   postgresql_version: 9.3
+  #   postgresql_encoding: 'UTF-8'
+  #   postgresql_locale: 'en_US.UTF-8'
+  #   postgresql_admin_user: "postgres"
+  #   postgresql_default_auth_method: "trust"
+  #   postgresql_cluster_name: "main"
+  #   postgresql_cluster_reset: false
+  #   postgresql_databases:
+  #   - name: default
+  #     hstore: no
+  #     uuid_ossp: no 
+  #   postgresql_users:
+  #   - name: vagrant
+  #     pass: 
+  #     encrypted: no
+  #   postgresql_user_privileges:
+  #   - name: vagrant
+  #     db: default
+  #     priv: "ALL"
+  #     role_attr_flags: "CREATEDB"
+  #   postgresql_pg_hba_default:
+  #   - { type: local, database: all, user: 'all', address: '', method: '{{ postgresql_default_auth_method }}', comment: '' }
+  #   - { type: local, database: all, user: all, address: '',             method: '{{ postgresql_default_auth_method }}', comment: '"local" is for Unix domain socket connections only' }
+  #   - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
+  #   - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
+
+
+
+  #   # azavea.elasticsearch
 
 
   pre_tasks:
     - name: Update apt-get
-      sudo: yes
+      become: true
       apt: update_cache=yes
 
 
   roles:
-    - { role: Stouts.timezone, sudo: yes }
-    - { role: Stouts.ntp, sudo: yes }
-    - { role: Stouts.locale, sudo: yes }
-    - { role: Stouts.python}
-    - { role: Stouts.rabbitmq, sudo: yes }
-    - { role: ANXS.postgresql, sudo: yes }
-    - { role: Stouts.redis, sudo: yes }
-    - { role: azavea.elasticsearch, sudo: yes }
-    - { role: gcporras.virtualenvwrapper, sudo: yes}
+    - { role: Stouts.timezone, become: true }
+    - { role: Stouts.ntp, become: true }
+    - { role: Stouts.locale, become: true }
+    - { role: Stouts.python, become: true }
+    - { role: Stouts.rabbitmq, become: true }
+    - { role: Stouts.redis, become: true }
+    - { role: Stouts.elasticsearch, become: true }
+    - { role: Stouts.apt, become: true }
+
 
   post_tasks:
     - name: Add sourcing of virtualenvwrapper in bash profile

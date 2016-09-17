@@ -1,7 +1,16 @@
 ---
 
-- include: install.deb.yml
-  when: ansible_os_family == 'Debian'
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: redis-install | Ensure redis user is exists
+  user: name={{redis_user}} state=present comment=Redis home={{redis_dir}} shell="/bin/false" system=yes
+
+- name: redis-install | Ensure the redis directories is exists
+  file: path={{item}} state=directory recurse=yes
+  with_items: ["{{redis_dir}}", "{{redis_conf_dir}}", "{{redis_db_dir}}", "{{redis_run_dir}}", "{{redis_log_dir}}"]
+
+- include: install.yml
   tags: [redis, redis-install]
 
 - include: configure.yml
@@ -9,3 +18,5 @@
 
 - name: Ensure the redis started
   service: name={{redis_service}} state=started enabled=yes
+  changed_when: false
+  when: redis_manage_service

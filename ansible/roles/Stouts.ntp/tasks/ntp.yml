@@ -11,4 +11,6 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Ensure NTP is running and enabled at system start.
-  service: name={{ ntp_daemon }} state=started enabled=yes
+  service: name={{ ntp_daemon }} state=started enabled=yes pattern='/ntpd'
+  changed_when: false
+  when: ntp_service

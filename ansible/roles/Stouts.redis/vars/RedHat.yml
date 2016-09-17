@@ -1,0 +1,4 @@
+---
+
+redis_requirements: ['gcc', 'make', 'tcl']
+redis_env_path: /etc/sysconfig/redis
