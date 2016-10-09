@@ -44,8 +44,18 @@
       - guest
 
     # Stouts.elasticsearch
-    elasticsearch_plugins:
-    - name: lukas-vlcek/bigdesk
+    elasticsearch_enabled: yes
+    elasticsearch_version: 2.4.1
+    elasticsearch_download_url: https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.1
+    elasticsearch_network_host: 0.0.0.0
+    # elasticsearch_plugins:
+    # - name: lukas-vlcek/bigdesk
+    # - name: elasticsearch/marvel
+
+    # Stouts.kibana
+    kibana_enabled: yes
+    kibana_elasticsearch_url: http://{{elasticsearch_network_host}}:9200
+
     
     # Stouts.redis
     redis_enabled: yes
@@ -101,6 +111,7 @@
     - { role: Stouts.rabbitmq, become: true }
     - { role: Stouts.redis, become: true }
     - { role: Stouts.elasticsearch, become: true }
+    - { role: Stouts.kibana, become: true }
     - { role: Stouts.apt, become: true }
     - { role: ANXS.postgresql, become: true }
 

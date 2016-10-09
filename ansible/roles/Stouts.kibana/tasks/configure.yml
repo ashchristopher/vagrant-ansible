@@ -1,0 +1,11 @@
+---
+
+- name: kibana-configure | Setup kibana
+  template: src=kibana.yml.j2 dest={{kibana_home}}/kibana.yml owner={{kibana_user}} group={{kibana_group}}
+
+- name: kibana-configure | Setup service
+  template: src=upstart.conf.j2 dest=/etc/init/kibana.conf
+  notify: kibana restart
+
+- name: kibana-configure | Ensure that kibana server is started
+  service: name=kibana state=started enabled=yes
